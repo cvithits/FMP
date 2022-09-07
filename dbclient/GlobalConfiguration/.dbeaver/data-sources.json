@@ -23,7 +23,7 @@
 		"postgres-jdbc-183181d5605-2ba43996fc0b9ec8": {
 			"provider": "postgresql",
 			"driver": "postgres-jdbc",
-			"name": "PostgreSQL@pg13_6",
+			"name": "PostgresQL13_6",
 			"description": "Local postgresql version 13.6",
 			"save-password": true,
 			"read-only": false,
@@ -31,7 +31,7 @@
 				"host": "pg13_6",
 				"port": "5432",
 				"database": "datawarehouse",
-				"url": "jdbc:postgresql://pg13_6:5432/datamart",
+				"url": "jdbc:postgresql://pg13_6:5432/datawarehouse",
 				"configurationType": "MANUAL",
 				"type": "dev",
 				"provider-properties": {
