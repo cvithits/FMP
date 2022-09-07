@@ -1,0 +1,60 @@
+version: '3.3'
+
+services:
+  dbclient: 
+    image: dbeaver/cloudbeaver:latest
+    restart: always
+    container_name: dbeavercloud
+    ports: 
+     - "1111:8978"
+    volumes:
+     - ./dbclient:/opt/cloudbeaver/workspace
+    depends_on:
+     - db
+  db:
+     image: postgres:13.6-alpine
+     restart: always
+     container_name: pg13_6
+     ports:
+       - "5432:5432"
+     volumes:
+       - ./db_data:/var/lib/postgresql/data
+       - ./initdb/:/docker-entrypoint-initdb.d/
+     environment:
+       - POSTGRES_USER=${POSTGRES_USER}
+       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+       - POSTGRES_DB=${POSTGRES_DB}
+       - TZ=Asia/Bangkok
+     expose:
+       - "5432"
+  glue:
+      image: amazon/aws-glue-libs:glue_libs_3.0.0_image_01
+      container_name: glue_jupyter_lab
+      #working_dir: ${WORKDIR}
+      volumes:
+        - ~/.aws:/home/glue_user/.aws
+        - ./:${WORKDIR}/jupyter_workspace
+        - ./temp/.jupyter:/home/glue_user/.jupyter
+        - ./temp/spark-events:/tmp/spark-events
+      environment:
+       # - AWS_PROFILE=${USER}
+       # - AWS_REGION=${AWS_REGION}
+        - DISABLE_SSL=true
+        - TZ=Asia/Bangkok
+        - POSTGRES_HOST=${POSTGRES_HOST}
+        - POSTGRES_USER=${POSTGRES_USER}
+        - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+        - POSTGRES_DB=${POSTGRES_DB}
+        - POSTGRES_PORT=${POSTGRES_PORT}
+      #  - DEV_FLAGJA=${DEV_FLAGJA}
+      ports:
+        - "4040:4040"
+        - "8888:8888" 
+        - "8998:8998"
+        - "18080:18080"
+      #entrypoint: ["/bin/sh","-c"]
+      depends_on:
+        - db
+      command: -c
+          "pip install -r ./jupyter_workspace/requirements.txt && /home/glue_user/workspace/jupyter_workspace/changeJDBC_driver.sh &&  /home/glue_user/jupyter/jupyter_start.sh"
+
