@@ -18,3 +18,9 @@ This repository contains following services. Please watch for the following port
 Note that: 
 - DBeaver cloud comes with preconfig to local postgresql
 - AWS credential is intentionally left unconfig (for local development purpose)
+
+Prerequisite
+- Docker engine and docker-compose installed
+
+How to start
+- Simply clone or download the project and start the environment by executing "run.sh"
